@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>Révision Réseaux & Internet</title>
+<style>
+:root{
+  --bg:#f8f8f6;--surface:#fff;--surface2:#f5f5f0;--border:#e4e4dc;--border2:#ccc;
+  --text:#1a1a1a;--text2:#555;--text3:#888;
+  --accent:#4A7FBF;--success:#2E9E6A;--warn:#E09F27;--danger:#C84040;
+  --b-blue-bg:#deeaf8;--b-blue-fg:#1a4a80;
+  --b-green-bg:#d8f0e5;--b-green-fg:#1a5030;
+  --b-amber-bg:#fdf0d0;--b-amber-fg:#7a5000;
+  --b-red-bg:#fde8e8;--b-red-fg:#8a1a1a;
+  --b-purple-bg:#eee8f8;--b-purple-fg:#4a2a8a;
+  --layer7:#d8f0e5;--layer7t:#1a5030;
+  --layer6:#deeaf8;--layer6t:#1a4a80;
+  --layer5:#eee8f8;--layer5t:#4a2a8a;
+  --layer4:#deeaf8;--layer4t:#1a4a80;
+  --layer3:#fdf0d0;--layer3t:#7a5000;
+  --layer2:#fde8e8;--layer2t:#6a1a1a;
+  --layer1:#eeeee8;--layer1t:#444;
+  --opt-correct-bg:#d8f0e5;--opt-correct-border:#2E9E6A;--opt-correct-text:#1a5030;
+  --opt-wrong-bg:#fde8e8;--opt-wrong-border:#C84040;--opt-wrong-text:#6a1a1a;
+  --opt-reveal-bg:#d8f0e5;--opt-reveal-border:#2E9E6A;--opt-reveal-text:#1a5030;
+}
+[data-theme="dark"]{
+  --bg:#111110;--surface:#1e1e1c;--surface2:#282826;--border:#333330;--border2:#555;
+  --text:#e8e8e0;--text2:#aaa;--text3:#666;
+  --accent:#6da0df;--success:#3dbe84;--warn:#f0b030;--danger:#e06060;
+  --b-blue-bg:#1a2e44;--b-blue-fg:#90bce8;
+  --b-green-bg:#0f2e1e;--b-green-fg:#6dcfa0;
+  --b-amber-bg:#2e2010;--b-amber-fg:#f0b84a;
+  --b-red-bg:#2e1010;--b-red-fg:#e08080;
+  --b-purple-bg:#1e1430;--b-purple-fg:#b090e8;
+  --layer7:#0f2e1e;--layer7t:#6dcfa0;
+  --layer6:#1a2e44;--layer6t:#90bce8;
+  --layer5:#1e1430;--layer5t:#b090e8;
+  --layer4:#1a2e44;--layer4t:#90bce8;
+  --layer3:#2e2010;--layer3t:#f0b84a;
+  --layer2:#2e1010;--layer2t:#e08080;
+  --layer1:#222220;--layer1t:#aaa;
+  --opt-correct-bg:#0f2e1e;--opt-correct-border:#3dbe84;--opt-correct-text:#6dcfa0;
+  --opt-wrong-bg:#2e1010;--opt-wrong-border:#e06060;--opt-wrong-text:#e08080;
+  --opt-reveal-bg:#0f2e1e;--opt-reveal-border:#3dbe84;--opt-reveal-text:#6dcfa0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:var(--text);font-size:14px;line-height:1.6;background:var(--bg);transition:background .2s,color .2s}
+.container{max-width:900px;margin:0 auto;padding:1.5rem}
+.top-bar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem}
+h1{font-size:22px;font-weight:700}
+.subtitle{color:var(--text2);font-size:13px;margin-top:.2rem}
+.toggle-btn{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 14px;cursor:pointer;font-size:13px;color:var(--text);display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
+.toggle-btn:hover{background:var(--surface2)}
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:10px}
+.nav button{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;font-family:inherit}
+.nav button.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:500}
+.nav button:hover:not(.active){background:var(--surface2);border-color:var(--border2);color:var(--text)}
+.page{display:none}.page.active{display:block}
+h2{font-size:17px;font-weight:600;margin:1.5rem 0 .75rem;border-left:3px solid var(--accent);padding-left:.75rem;color:var(--text)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem}
+.card.info{border-left:3px solid var(--accent)}
+.card.warn{border-left:3px solid var(--warn)}
+.card.success{border-left:3px solid var(--success)}
+.card.danger{border-left:3px solid var(--danger)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:.75rem}
+th{text-align:left;padding:7px 10px;border-bottom:2px solid var(--border);color:var(--text2);font-weight:600;background:var(--surface2)}
+td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+tr:hover td{background:var(--surface2)}
+code{font-family:monospace;background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--text)}
+.row{display:flex;gap:.75rem;align-items:flex-start;padding:5px 0}
+.row-label{font-weight:600;font-size:12px;min-width:120px;color:var(--text2);flex-shrink:0}
+.row-val{font-size:13px;color:var(--text)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+.b-blue{background:var(--b-blue-bg);color:var(--b-blue-fg)}
+.b-green{background:var(--b-green-bg);color:var(--b-green-fg)}
+.b-amber{background:var(--b-amber-bg);color:var(--b-amber-fg)}
+.b-red{background:var(--b-red-bg);color:var(--b-red-fg)}
+.b-purple{background:var(--b-purple-bg);color:var(--b-purple-fg)}
+.flashcard{background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:2rem;text-align:center;min-height:150px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;margin-bottom:1rem;transition:box-shadow .15s}
+.flashcard:hover{box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.fc-front{font-size:17px;font-weight:600;color:var(--text)}
+.fc-back{display:none;font-size:14px;color:var(--text2);line-height:1.7;max-width:600px}
+.flashcard.flipped .fc-front{display:none}
+.flashcard.flipped .fc-back{display:block}
+.fc-hint{font-size:11px;color:var(--text3);margin-top:.75rem}
+.fc-nav{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:1rem}
+.fc-counter{font-size:13px;color:var(--text2);min-width:60px;text-align:center}
+.progress-bar{height:5px;background:var(--surface2);border-radius:3px;margin-bottom:1rem;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+.quiz-q{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.qtext{font-weight:600;margin-bottom:.875rem;line-height:1.5;color:var(--text)}
+.qnum{font-size:11px;color:var(--text3);font-weight:400;display:block;margin-bottom:.25rem}
+.opt{display:block;padding:8px 12px;border-radius:7px;cursor:pointer;margin-bottom:5px;border:1px solid var(--border);transition:all .1s;font-size:13px;user-select:none;color:var(--text);background:var(--surface)}
+.opt:hover{background:var(--surface2);border-color:var(--border2)}
+.opt.correct{background:var(--opt-correct-bg);border-color:var(--opt-correct-border);color:var(--opt-correct-text);font-weight:500}
+.opt.wrong{background:var(--opt-wrong-bg);border-color:var(--opt-wrong-border);color:var(--opt-wrong-text)}
+.opt.reveal{background:var(--opt-reveal-bg);border-color:var(--opt-reveal-border);color:var(--opt-reveal-text)}
+.explanation{margin-top:.75rem;padding:.75rem;background:var(--surface2);border-radius:7px;font-size:13px;color:var(--text2);display:none}
+.explanation.show{display:block}
+.score-card{text-align:center;padding:2rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:1rem}
+.score-num{font-size:52px;font-weight:700;color:var(--success)}
+.score-sub{font-size:14px;color:var(--text2);margin-top:.5rem}
+button{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:7px 16px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text)}
+button:hover{background:var(--surface2)}
+button.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+button.primary:hover{opacity:.85}
+.layer-grid{display:grid;grid-template-columns:36px 130px 1fr;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.layer-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="top-bar">
+  <div>
+    <h1>📡 Réseaux & Internet</h1>
+    <div class="subtitle">L3 MIASHS/MIAGE — 2025-2026 | QCM 1h30</div>
+  </div>
+  <button class="toggle-btn" onclick="toggleTheme()" id="theme-btn">🌙 Mode nuit</button>
+</div>
+
+<div class="nav">
+  <button class="active" onclick="show('intro')">CM1 Introduction</button>
+  <button onclick="show('appli')">CM2 Applications</button>
+  <button onclick="show('transport')">CM4 Transport</button>
+  <button onclick="show('reseau')">CM3 IP & Routage</button>
+  <button onclick="show('fc')">🃏 Flashcards</button>
+  <button onclick="show('quiz')">📝 QCM</button>
+</div>
+
+<!-- CM1 -->
+<div class="page active" id="p-intro">
+<h2>Internet — Définition & Structure</h2>
+<div class="card info">Réseau des réseaux : interconnexion d'ISP via des protocoles standards (TCP, IP, HTTP…). Standards publiés sous forme de <b>RFC</b> par l'<b>IETF</b>.</div>
+<table>
+<tr><th>Composant</th><th>Exemples</th></tr>
+<tr><td>Hôtes / systèmes terminaux</td><td>Ordinateurs, smartphones, capteurs</td></tr>
+<tr><td>Liaisons physiques</td><td>Câble, fibre, WiFi, satellite</td></tr>
+<tr><td>Nœuds d'interconnexion</td><td>Routeurs, switches, bornes WiFi</td></tr>
+<tr><td>ISP (Internet Service Provider)</td><td>Orange, Free, SFR…</td></tr>
+</table>
+
+<h2>Commutation de paquets vs circuits</h2>
+<table>
+<tr><th></th><th>Commutation de paquets (Internet)</th><th>Commutation de circuits (RTC)</th></tr>
+<tr><td><b>Ressources</b></td><td>Partagées (pas de réservation)</td><td>Réservées pour la durée</td></tr>
+<tr><td><b>Connexion</b></td><td>Sans connexion préalable</td><td>Circuit établi avant transfert</td></tr>
+<tr><td><b>Files d'attente</b></td><td>Oui (store-and-forward)</td><td>Non</td></tr>
+<tr><td><b>Qualité</b></td><td>Best effort (non garantie)</td><td>Garantie</td></tr>
+<tr><td><b>Exemples</b></td><td>Internet / IP</td><td>Téléphonie, X.25, RNIS</td></tr>
+</table>
+
+<h2>Métriques de performance</h2>
+<table>
+<tr><th>Métrique</th><th>Formule</th></tr>
+<tr><td>Délai transmission (d<sub>trans</sub>)</td><td>Taille / Débit — ex: 4 Mb ÷ 2 Mb/s = 2 s</td></tr>
+<tr><td>Délai propagation (d<sub>prop</sub>)</td><td>Distance / Vitesse propagation</td></tr>
+<tr><td>RTT</td><td>2 × d<sub>prop</sub></td></tr>
+<tr><td>Latence totale</td><td>d<sub>trans</sub> + d<sub>prop</sub> + d<sub>proc</sub> + d<sub>att</sub></td></tr>
+<tr><td>PLR (Packet Loss Rate)</td><td>N<sub>perdus</sub> / N<sub>envoyés</sub> × 100 %</td></tr>
+</table>
+<div class="card warn"><b>Attention :</b> 1 kbit/s = 10³ bps | 1 kB = 10³ octets | 1 KiB = 2¹⁰ = 1024 octets</div>
+
+<h2>Modèle OSI — 7 couches</h2>
+<div class="card">
+<div class="layer-grid" style="border-top:1px solid var(--border)"><div style="font-size:11px;color:var(--text3)">#</div><div style="font-size:11px;color:var(--text2);font-weight:600">Couche</div><div style="font-size:11px;color:var(--text2);font-weight:600">PDU · Rôle · Protocoles</div></div>
+<div class="layer-grid"><div class="layer-num" style="background:var(--layer7);color:var(--layer7t)">7</div><div><b>Application</b></div><div>Message · Services aux apps · HTTP, FTP, DNS, SMTP</div></div>
+<div class="layer-grid"><div class="layer-num" style="background:var(--layer6);color:var(--layer6t)">6</div><div><b>Présentation</b></div><div>Encodage, chiffrement, little/big endian</div></div>
+<div class="layer-grid"><div class="layer-num" style="background:var(--layer5);color:var(--layer5t)">5</div><div><b>Session</b></div><div>Dialogue, synchronisation, gestion de session</div></div>
+<div class="layer-grid"><div class="layer-num" style="background:var(--layer4);color:var(--layer4t)">4</div><div><b>Transport</b></div><div>Segment · Bout-en-bout, multiplexage · TCP, UDP</div></div>
+<div class="layer-grid"><div class="layer-num" style="background:var(--layer3);color:var(--layer3t)">3</div><div><b>Réseau</b></div><div>Paquet · Routage, adressage logique · IP, ICMP</div></div>
+<div class="layer-grid"><div class="layer-num" style="background:var(--layer2);color:var(--layer2t)">2</div><div><b>Liaison</b></div><div>Trame · Détection erreurs, adresse MAC · Ethernet</div></div>
+<div class="layer-grid" style="border-bottom:none"><div class="layer-num" style="background:var(--layer1);color:var(--layer1t)">1</div><div><b>Physique</b></div><div>Bit · Signal électrique/optique, caractéristiques physiques</div></div>
+</div>
+
+<h2>Équipements réseau</h2>
+<table>
+<tr><th>Équipement</th><th>Couche OSI</th><th>Adresse manipulée</th></tr>
+<tr><td>Hub / Concentrateur</td><td>1 – Physique</td><td>Aucune (régénère signal)</td></tr>
+<tr><td>Switch / Commutateur</td><td>2 – Liaison</td><td>Adresse MAC</td></tr>
+<tr><td>Pont / Bridge</td><td>2 – Liaison</td><td>Adresse MAC</td></tr>
+<tr><td>Routeur / Passerelle</td><td>3 – Réseau</td><td>Adresse IP</td></tr>
+</table>
+<div class="card info"><b>Encapsulation :</b> Chaque couche ajoute un en-tête. Application → Transport (segment) → Réseau (paquet) → Liaison (trame) → Physique (bits). Réception = processus inverse.</div>
+</div>
+
+<!-- CM2 -->
+<div class="page" id="p-appli">
+<h2>Web & HTTP</h2>
+<div class="card info">HTTP = protocole <b>sans état (stateless)</b>, utilise TCP. Port <code>80</code> (HTTP), <code>443</code> (HTTPS = HTTP + TLS).</div>
+<table>
+<tr><th>Version</th><th>Connexion</th><th>Particularité</th></tr>
+<tr><td>HTTP/1.0</td><td>Non persistante</td><td>1 objet par connexion TCP — 2 RTT par objet</td></tr>
+<tr><td>HTTP/1.1</td><td>Persistante (défaut)</td><td>Plusieurs objets par TCP, pipelining possible</td></tr>
+<tr><td>HTTP/2</td><td>Persistante + TLS</td><td>Multiplexage (plusieurs flux sur 1 connexion)</td></tr>
+<tr><td>HTTP/3</td><td>QUIC (sur UDP)</td><td>0-RTT si serveur connu, élimine head-of-line blocking</td></tr>
+</table>
+<div class="card warn"><b>Calcul RTT :</b> Non-persistant = 2RTT + t<sub>trans</sub> par objet. Persistant avec pipelining ≈ 2RTT initiaux + 1RTT pour tous les objets.</div>
+
+<h2>DNS — Domain Name System</h2>
+<div class="card info">Résolution nom → IP. Base de données <b>hiérarchique et distribuée</b>. Cache pour performances.</div>
+<table>
+<tr><th>Type RR</th><th>name</th><th>value</th></tr>
+<tr><td><span class="badge b-blue">A</span></td><td>Hostname</td><td>Adresse IPv4</td></tr>
+<tr><td><span class="badge b-purple">AAAA</span></td><td>Hostname</td><td>Adresse IPv6</td></tr>
+<tr><td><span class="badge b-amber">NS</span></td><td>Domaine</td><td>Serveur de noms faisant autorité</td></tr>
+<tr><td><span class="badge b-green">CNAME</span></td><td>Alias</td><td>Nom canonique (réel)</td></tr>
+<tr><td><span class="badge b-red">MX</span></td><td>Domaine</td><td>Serveur mail associé</td></tr>
+</table>
+<table>
+<tr><th>Type résolution</th><th>Principe</th></tr>
+<tr><td>Itérative</td><td>Le résolveur interroge chaque serveur lui-même : racine → TLD → autoritaire</td></tr>
+<tr><td>Récursive</td><td>Chaque serveur interroge le suivant et remonte la réponse finale</td></tr>
+</table>
+
+<h2>Messagerie & Transfert de fichiers</h2>
+<table>
+<tr><th>Protocole</th><th>Rôle</th><th>Port</th><th>Transport</th></tr>
+<tr><td>SMTP</td><td>Envoi/relais mail entre serveurs</td><td>25</td><td>TCP</td></tr>
+<tr><td>POP3</td><td>Récupération mail (téléchargement)</td><td>110</td><td>TCP</td></tr>
+<tr><td>IMAP</td><td>Accès mail avec répertoire central</td><td>143</td><td>TCP</td></tr>
+<tr><td>FTP</td><td>Transfert de fichiers</td><td>21 (cmd), 20 (data)</td><td>TCP</td></tr>
+<tr><td>TFTP</td><td>Transfert simplifié (sans auth)</td><td>69</td><td>UDP</td></tr>
+<tr><td>SSH / SCP</td><td>Terminal sécurisé / transfert chiffré</td><td>22</td><td>TCP</td></tr>
+</table>
+
+<h2>Réseaux P2P</h2>
+<table>
+<tr><th>Architecture</th><th>Avantages</th><th>Inconvénients</th></tr>
+<tr><td>Serveur central (Napster)</td><td>Recherche rapide</td><td>Point de panne unique</td></tr>
+<tr><td>Non-structurée (Gnutella)</td><td>Distribué, résilient</td><td>Inondation, scalabilité faible</td></tr>
+<tr><td>Structurée DHT (KAD)</td><td>Recherche exacte, scalable</td><td>Recherches non-exactes impossibles</td></tr>
+</table>
+<div class="card"><b>TOR :</b> Anonymat par chiffrement multicouche. Chaque relais ne connaît que ses voisins immédiats.</div>
+</div>
+
+<!-- CM4 TRANSPORT -->
+<div class="page" id="p-transport">
+<h2>TCP vs UDP</h2>
+<table>
+<tr><th></th><th>TCP</th><th>UDP</th></tr>
+<tr><td>Connexion</td><td>Orienté connexion (3-way handshake)</td><td>Sans connexion</td></tr>
+<tr><td>Fiabilité</td><td>Oui (ACK + retransmission)</td><td>Non</td></tr>
+<tr><td>Ordre</td><td>Garanti</td><td>Non garanti</td></tr>
+<tr><td>Contrôle flux/congestion</td><td>Oui</td><td>Non</td></tr>
+<tr><td>En-tête</td><td>20+ octets</td><td>8 octets</td></tr>
+<tr><td>Usages</td><td>HTTP, FTP, SMTP, SSH</td><td>DNS, VoIP, streaming, TFTP</td></tr>
+</table>
+
+<h2>Ports bien connus</h2>
+<table>
+<tr><th>Port</th><th>Service</th><th>Transport</th></tr>
+<tr><td><code>20/21</code></td><td>FTP (data/commande)</td><td>TCP</td></tr>
+<tr><td><code>22</code></td><td>SSH</td><td>TCP</td></tr>
+<tr><td><code>23</code></td><td>Telnet</td><td>TCP</td></tr>
+<tr><td><code>25</code></td><td>SMTP</td><td>TCP</td></tr>
+<tr><td><code>53</code></td><td>DNS</td><td>UDP (et TCP)</td></tr>
+<tr><td><code>69</code></td><td>TFTP</td><td>UDP</td></tr>
+<tr><td><code>80</code></td><td>HTTP</td><td>TCP</td></tr>
+<tr><td><code>110</code></td><td>POP3</td><td>TCP</td></tr>
+<tr><td><code>143</code></td><td>IMAP</td><td>TCP</td></tr>
+<tr><td><code>443</code></td><td>HTTPS</td><td>TCP</td></tr>
+</table>
+
+<h2>Protocoles de fiabilité</h2>
+<table>
+<tr><th>Protocole</th><th>Fenêtre</th><th>Comportement sur perte</th></tr>
+<tr><td>Stop-and-Wait</td><td>1 segment</td><td>Attend ACK avant le suivant</td></tr>
+<tr><td>Go-Back-N</td><td>W segments</td><td>Timeout sur k → renvoie k, k+1… tout</td></tr>
+<tr><td>Selective Repeat</td><td>W segments</td><td>Timeout sur k → renvoie uniquement k</td></tr>
+</table>
+
+<h2>Établissement & fermeture TCP</h2>
+<div class="card">
+<b>3-way handshake (ouverture) :</b><br>
+1. Client → Serveur : <code>SYN</code>, seq=x<br>
+2. Serveur → Client : <code>SYN-ACK</code>, seq=y, ack=x+1<br>
+3. Client → Serveur : <code>ACK</code>, ack=y+1<br><br>
+<b>Fermeture :</b> 4-way — <code>FIN</code> → <code>ACK</code> → <code>FIN</code> → <code>ACK</code>
+</div>
+
+<h2>Contrôle de congestion TCP</h2>
+<table>
+<tr><th>Phase</th><th>Comportement</th><th>Déclencheur</th></tr>
+<tr><td>Slow Start</td><td>cwnd croît exponentiellement</td><td>Départ ou après timeout</td></tr>
+<tr><td>Congestion Avoidance</td><td>cwnd croît linéairement (+1 MSS/RTT)</td><td>cwnd ≥ ssthresh</td></tr>
+<tr><td>Réaction timeout</td><td>cwnd = 1, ssthresh = cwnd/2</td><td>Perte majeure</td></tr>
+<tr><td>Réaction 3 ACK dup.</td><td>Fast Retransmit, cwnd ÷ 2</td><td>Perte mineure</td></tr>
+</table>
+<div class="card">
+<b>Estimation RTT :</b><br>
+<code>EstimatedRTT = (1-α)·EstimatedRTT + α·SampleRTT</code>  (α = 0.125)<br>
+<code>RTO = EstimatedRTT + 4·Deviation</code>
+</div>
+</div>
+
+<!-- CM3 RÉSEAU -->
+<div class="page" id="p-reseau">
+<h2>Protocole IP</h2>
+<div class="card info">IP = <b>best effort</b>, sans connexion, sans garantie. Chaque paquet routé indépendamment. RFC 791.</div>
+
+<h2>Adressage IPv4 & CIDR</h2>
+<div class="card">
+<b>Format :</b> 32 bits — <code>192.168.1.0/24</code> → masque 255.255.255.0<br><br>
+<b>Calcul :</b> /n → 2^(32-n) adresses totales, dont <b>2^(32-n) - 2</b> utilisables<br>
+Adresse réseau = IP <b>AND</b> masque | Broadcast = réseau <b>OR NOT</b>(masque)
+</div>
+<table>
+<tr><th>Préfixe</th><th>Masque</th><th>Hôtes utilisables</th></tr>
+<tr><td>/24</td><td>255.255.255.0</td><td>254</td></tr>
+<tr><td>/25</td><td>255.255.255.128</td><td>126</td></tr>
+<tr><td>/28</td><td>255.255.255.240</td><td>14</td></tr>
+<tr><td>/30</td><td>255.255.255.252</td><td>2</td></tr>
+</table>
+
+<h2>Adresses spéciales</h2>
+<table>
+<tr><th>Adresse</th><th>Signification</th></tr>
+<tr><td><code>0.0.0.0</code></td><td>Hôte inconnu sur ce réseau (source)</td></tr>
+<tr><td><code>255.255.255.255</code></td><td>Broadcast tous hôtes</td></tr>
+<tr><td><code>127.0.0.1</code></td><td>Loopback (boucle locale)</td></tr>
+<tr><td><code>10.0.0.0/8</code></td><td>Privée RFC 1918</td></tr>
+<tr><td><code>172.16.0.0/12</code></td><td>Privée RFC 1918</td></tr>
+<tr><td><code>192.168.0.0/16</code></td><td>Privée RFC 1918</td></tr>
+</table>
+
+<h2>Protocoles complémentaires</h2>
+<table>
+<tr><th>Protocole</th><th>Rôle</th></tr>
+<tr><td>ARP (RFC 826)</td><td>IP → MAC sur le LAN. Broadcast → réponse unicast. Cache ARP.</td></tr>
+<tr><td>DHCP</td><td>Attribution dynamique d'IP. DISCOVER → OFFER → REQUEST → ACK</td></tr>
+<tr><td>ICMP</td><td>Contrôle IP. Type 8=ping request, 0=reply, 3=inaccessible, 11=TTL expired</td></tr>
+<tr><td>NAT</td><td>Traduit IPs privées ↔ IP publique. Économise adresses IPv4.</td></tr>
+</table>
+
+<h2>Routage</h2>
+<table>
+<tr><th>Type</th><th>Principe</th><th>Protocole</th></tr>
+<tr><td>Vecteur de distance</td><td>Annonce distances aux voisins</td><td>RIP, IGRP</td></tr>
+<tr><td>État de liens</td><td>Diffuse voisins à tout le réseau</td><td>OSPF (Dijkstra)</td></tr>
+<tr><td>IGP (intra-AS)</td><td>À l'intérieur d'un AS</td><td>RIP, OSPF</td></tr>
+<tr><td>EGP (inter-AS)</td><td>Entre AS différents</td><td>BGP-4 (sur TCP)</td></tr>
+</table>
+
+<h2>IPv6</h2>
+<div class="card success">128 bits | <code>FE80::/10</code> = lien local | Auto-config SLAAC via NDP<br>
+Pas de broadcast | En-têtes d'extension | ICMPv6 remplace ARP</div>
+</div>
+
+<!-- FLASHCARDS -->
+<div class="page" id="p-fc">
+<h2>Flashcards</h2>
+<div class="progress-bar"><div class="progress-fill" id="fc-bar" style="width:0%"></div></div>
+<div class="fc-nav">
+  <button onclick="fcPrev()">← Précédent</button>
+  <span class="fc-counter" id="fc-ctr">1 / 30</span>
+  <button onclick="fcNext()">Suivant →</button>
+  <button onclick="fcShuffle()">🔀 Mélanger</button>
+</div>
+<div class="flashcard" id="fc" onclick="fcFlip()">
+  <div class="fc-front" id="fc-q"></div>
+  <div class="fc-back" id="fc-a"></div>
+  <div class="fc-hint">Cliquer pour retourner la carte</div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="p-quiz">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+<h2 style="margin:0">QCM d'entraînement</h2>
+<button class="primary" onclick="resetQuiz()">↺ Réinitialiser</button>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="q-bar" style="width:0%"></div></div>
+<div id="score-area" style="display:none">
+  <div class="score-card">
+    <div class="score-num" id="final-score"></div>
+    <div class="score-sub" id="final-msg"></div>
+  </div>
+  <button class="primary" onclick="resetQuiz()" style="width:100%;padding:10px;margin-bottom:1rem">Recommencer</button>
+</div>
+<div id="quiz-area"></div>
+</div>
+
+</div>
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const dark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('theme-btn').textContent=dark?'🌙 Mode nuit':'☀️ Mode jour';
+  localStorage.setItem('theme',dark?'light':'dark');
+}
+(function(){
+  const saved=localStorage.getItem('theme');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.addEventListener('DOMContentLoaded',()=>{
+      const b=document.getElementById('theme-btn');
+      if(b)b.textContent='☀️ Mode jour';
+    });
+  }
+})();
+
+const navOrder=['intro','appli','transport','reseau','fc','quiz'];
+const pages={intro:'p-intro',appli:'p-appli',transport:'p-transport',reseau:'p-reseau',fc:'p-fc',quiz:'p-quiz'};
+function show(id){
+  Object.values(pages).forEach(p=>document.getElementById(p).classList.remove('active'));
+  document.getElementById(pages[id]).classList.add('active');
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',navOrder[i]===id));
+}
+
+const cards=[
+  ["Qu'est-ce que le RTT ?","Round Trip Time = 2 × délai de propagation. Temps pour envoyer un paquet et recevoir son acquittement."],
+  ["Citez les 7 couches OSI dans l'ordre","1-Physique · 2-Liaison · 3-Réseau · 4-Transport · 5-Session · 6-Présentation · 7-Application"],
+  ["Différence commutation de paquets vs circuits ?","Circuits : ressources réservées, qualité garantie (RTC). Paquets : ressources partagées, best effort (Internet)."],
+  ["Qu'est-ce que l'encapsulation ?","Chaque couche ajoute un en-tête. Application → segment → paquet → trame → bits. Réception = inverse."],
+  ["HTTP est-il stateful ou stateless ?","Stateless — le serveur ne conserve aucune information entre les requêtes."],
+  ["Qu'est-ce qu'un socket TCP ?","Couple (Adresse IP, Numéro de port). Identifie un processus communicant. Ex: 192.168.1.1:80"],
+  ["Différence TCP vs UDP ?","TCP : connexion, fiable, ordonné, 20+ octets. UDP : sans connexion, non fiable, rapide, 8 octets."],
+  ["Qu'est-ce que le 3-way handshake TCP ?","SYN (client) → SYN-ACK (serveur) → ACK (client). Établit la connexion."],
+  ["Qu'est-ce que ARP ?","Address Resolution Protocol. Résout IP → MAC sur le LAN via broadcast."],
+  ["Qu'est-ce que DHCP ?","Attribue automatiquement une IP par leasing. DISCOVER → OFFER → REQUEST → ACK."],
+  ["Qu'est-ce que le NAT ?","Traduit IPs privées ↔ IP publique au routeur. Économise les adresses IPv4 publiques."],
+  ["Qu'est-ce que ICMP ?","Messages de contrôle d'IP. ping = type 8/0. traceroute = type 11 (TTL expired)."],
+  ["Comment fonctionne traceroute ?","Envoie paquets avec TTL=1,2,3… Chaque routeur décrémente le TTL et envoie ICMP Time Exceeded."],
+  ["Qu'est-ce que CIDR ?","Notation /n = n bits du masque. Ex: /24 → 255.255.255.0 → 254 hôtes utilisables."],
+  ["Adresses IP privées RFC 1918 ?","10.0.0.0/8 | 172.16.0.0/12 | 192.168.0.0/16 — Non routables sur Internet."],
+  ["Qu'est-ce que le DNS ?","Base de données hiérarchique et distribuée. Traduit noms de domaine → adresses IP."],
+  ["Enregistrement DNS type A ?","Associe un hostname à une adresse IPv4. Ex: www.loria.fr → 193.50.135.38"],
+  ["Résolution DNS itérative vs récursive ?","Itérative : résolveur interroge chaque niveau. Récursive : chaque serveur interroge le suivant."],
+  ["Qu'est-ce que la fenêtre glissante ?","Envoyer W segments avant de recevoir un ACK. Améliore l'utilisation de la bande passante."],
+  ["Qu'est-ce que la congestion window (cwnd) ?","Fenêtre de congestion TCP, connue de l'émetteur seulement. Effective = min(cwnd, fenêtre récepteur)."],
+  ["Go-Back-N vs Selective Repeat ?","Go-Back-N : retransmet k, k+1… Selective Repeat : retransmet uniquement k. SR plus efficace."],
+  ["Qu'est-ce que l'adresse MAC ?","Adresse physique 48 bits unique par interface. Couche liaison. Attribuée par le constructeur."],
+  ["Qu'est-ce que IPv6 ?","Adresses 128 bits, auto-config SLAAC, pas de broadcast, ICMPv6 remplace ARP."],
+  ["Qu'est-ce que BGP ?","Border Gateway Protocol v4. Routage EGP entre Autonomous Systems. Utilise TCP port 179."],
+  ["Qu'est-ce que OSPF ?","Open Shortest Path First. Protocole IGP à état de liens. Algorithme de Dijkstra."],
+  ["Délai transmission vs propagation ?","Transmission = Taille/Débit (mettre les bits sur le câble). Propagation = Distance/Vitesse (transit)."],
+  ["Qu'est-ce que SMTP ?","Simple Mail Transfer Protocol. Transfert emails entre serveurs. Port TCP 25."],
+  ["Port HTTP vs HTTPS ?","HTTP = 80. HTTPS = 443 (HTTP + TLS)."],
+  ["Qu'est-ce que TLS ?","Successeur de SSL. Chiffrement + intégrité + authentification. Utilisé dans HTTPS."],
+  ["Qu'est-ce que QUIC ?","Protocole sur UDP (Google). Intègre TLS 1.3, multiplexage, contrôle de congestion. Base de HTTP/3."],
+];
+
+let fcArr=[...cards],fcIdx=0;
+function fcRender(){
+  const c=fcArr[fcIdx];
+  document.getElementById('fc').classList.remove('flipped');
+  document.getElementById('fc-q').textContent=c[0];
+  document.getElementById('fc-a').textContent=c[1];
+  document.getElementById('fc-ctr').textContent=(fcIdx+1)+' / '+fcArr.length;
+  document.getElementById('fc-bar').style.width=((fcIdx+1)/fcArr.length*100)+'%';
+}
+function fcFlip(){document.getElementById('fc').classList.toggle('flipped')}
+function fcNext(){fcIdx=(fcIdx+1)%fcArr.length;fcRender()}
+function fcPrev(){fcIdx=(fcIdx-1+fcArr.length)%fcArr.length;fcRender()}
+function fcShuffle(){fcArr=[...cards].sort(()=>Math.random()-.5);fcIdx=0;fcRender()}
+fcRender();
+
+const qs=[
+  {q:"Quel protocole TCP/IP utilise HTTP pour le transport ?",o:["UDP","IP","TCP","ICMP"],a:2,e:"HTTP s'appuie sur TCP pour la fiabilité (connexion garantie, ordre des paquets, retransmission)."},
+  {q:"Quelle est la PDU de la couche Réseau (couche 3) ?",o:["Bit","Trame","Paquet","Segment"],a:2,e:"Couche 3 = Paquet. Couche 4 = Segment. Couche 2 = Trame. Couche 1 = Bit."},
+  {q:"Un fichier de 4 Mb est envoyé sur une liaison à 2 Mb/s. Délai de transmission ?",o:["0.5 s","1 s","2 s","4 s"],a:2,e:"d_trans = Taille / Débit = 4 Mb / 2 Mb/s = 2 secondes."},
+  {q:"À quelle couche OSI opère un switch ?",o:["Couche 1 – Physique","Couche 2 – Liaison","Couche 3 – Réseau","Couche 4 – Transport"],a:1,e:"Un switch opère en couche 2 (Liaison) et utilise les adresses MAC pour commuter les trames."},
+  {q:"Qu'est-ce que le protocole ARP ?",o:["Traduit IP → MAC","Traduit MAC → IP","Attribue des IPs dynamiquement","Résout les noms DNS"],a:0,e:"ARP traduit une adresse IP connue en adresse MAC pour la livraison sur le réseau local."},
+  {q:"Quel est le masque correspondant au préfixe /20 ?",o:["255.255.0.0","255.255.240.0","255.255.255.0","255.240.0.0"],a:1,e:"/20 = 20 bits à 1. Binaire : 11111111.11111111.11110000.00000000 = 255.255.240.0."},
+  {q:"Quel type d'enregistrement DNS donne le serveur mail d'un domaine ?",o:["Type A","Type CNAME","Type NS","Type MX"],a:3,e:"L'enregistrement MX (Mail eXchange) associe un domaine à son serveur de messagerie."},
+  {q:"Quelle est la taille d'une adresse IPv6 ?",o:["32 bits","64 bits","128 bits","256 bits"],a:2,e:"IPv6 utilise des adresses de 128 bits (contre 32 bits pour IPv4)."},
+  {q:"Ordre du 3-way handshake TCP ?",o:["SYN → ACK → FIN","SYN → SYN-ACK → ACK","ACK → SYN → ACK","FIN → ACK → FIN"],a:1,e:"Ouverture TCP : client envoie SYN, serveur répond SYN-ACK, client confirme avec ACK."},
+  {q:"Quelle adresse IP est la boucle locale (loopback) ?",o:["0.0.0.0","192.168.0.1","127.0.0.1","255.255.255.255"],a:2,e:"127.0.0.1 désigne la machine locale elle-même."},
+  {q:"Parmi les suivants, lequel utilise UDP ?",o:["FTP","HTTP","DNS","SMTP"],a:2,e:"DNS utilise UDP port 53 pour la rapidité. FTP, HTTP, SMTP utilisent TCP."},
+  {q:"Quelle est la taille de l'en-tête UDP ?",o:["4 octets","8 octets","20 octets","40 octets"],a:1,e:"En-tête UDP = 8 octets : port source + port dest + longueur + checksum (2 octets chacun)."},
+  {q:"L'adresse IP 10.5.4.3 appartient à quelle catégorie ?",o:["Adresse publique","Adresse privée RFC 1918","Adresse loopback","Adresse broadcast"],a:1,e:"10.0.0.0/8 est une plage privée RFC 1918 (avec 172.16.0.0/12 et 192.168.0.0/16)."},
+  {q:"Quel protocole de routage est à état de liens (link-state) ?",o:["RIP","IGRP","OSPF","BGP"],a:2,e:"OSPF est un protocole IGP à état de liens utilisant l'algorithme de Dijkstra."},
+  {q:"HTTP/3 s'appuie sur quel protocole de transport ?",o:["TCP directement","UDP via QUIC","SCTP","TLS seul"],a:1,e:"HTTP/3 utilise QUIC (sur UDP) qui intègre TLS 1.3, multiplexage et contrôle de congestion."},
+  {q:"Un routeur opère à quelle couche OSI ?",o:["Couche 1","Couche 2","Couche 3","Couche 4"],a:2,e:"Un routeur opère en couche 3 (Réseau) et achemine les paquets via les adresses IP."},
+  {q:"Que signifie 'IP best effort' ?",o:["IP garantit la livraison","IP livre dans l'ordre","IP ne garantit ni livraison, ni ordre, ni délai","IP utilise des circuits virtuels"],a:2,e:"IP est sans connexion et sans garantie : paquets peuvent se perdre, arriver en désordre."},
+  {q:"Combien d'hôtes utilisables dans un /28 ?",o:["14","16","30","254"],a:0,e:"/28 = 4 bits hôte → 2⁴ = 16 adresses - 2 (réseau + broadcast) = 14 hôtes utilisables."},
+  {q:"Quel protocole attribue dynamiquement des adresses IP ?",o:["ARP","RARP","BOOTP","DHCP"],a:3,e:"DHCP attribue dynamiquement des IPs avec un mécanisme de leasing (bail temporaire)."},
+  {q:"Quel port FTP est utilisé pour les commandes ?",o:["Port 20","Port 21","Port 22","Port 23"],a:1,e:"FTP commandes = port 21. Port 20 = transfert de données (mode actif). SSH=22, Telnet=23."},
+  {q:"Lors d'un timeout TCP, que se passe-t-il avec cwnd ?",o:["cwnd = cwnd/2","cwnd = 1 MSS, ssthresh = cwnd/2","cwnd augmente linéairement","La connexion se ferme"],a:1,e:"Timeout = perte majeure. TCP remet cwnd à 1 MSS, ssthresh = cwnd/2, repart en Slow Start."},
+  {q:"Qu'est-ce que TLS ?",o:["Un protocole de routage","Un remplaçant de TCP","Chiffrement + authentification + intégrité","Un protocole d'accès réseau"],a:2,e:"TLS (Transport Layer Security) assure chiffrement, intégrité et authentification. Successeur de SSL."},
+  {q:"Quelle adresse un hub manipule-t-il ?",o:["Aucune","Adresse MAC","Adresse IP","Adresse de port"],a:0,e:"Un hub opère en couche 1 (physique) : il répète le signal sans lire aucune adresse."},
+  {q:"Que calcule-t-on avec Distance / Vitesse de propagation ?",o:["Débit","Délai de transmission","Délai de propagation","RTT"],a:2,e:"Délai de propagation = Distance / Vitesse de propagation (~200 000 à 300 000 km/s)."},
+  {q:"Différence Go-Back-N vs Selective Repeat ?",o:["Aucune","Go-Back-N retransmet uniquement le perdu","Selective Repeat retransmet tout depuis le perdu","Go-Back-N retransmet tout, Selective Repeat retransmet uniquement le perdu"],a:3,e:"Go-Back-N : retransmet k, k+1, k+2… Selective Repeat : retransmet uniquement k."},
+];
+
+let answered=[];
+function renderQuiz(){
+  const area=document.getElementById('quiz-area');
+  area.innerHTML='';
+  answered=new Array(qs.length).fill(null);
+  qs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-q';
+    let html='<div class="qtext"><span class="qnum">Question '+(i+1)+' / '+qs.length+'</span>'+q.q+'</div>';
+    q.o.forEach((o,j)=>{html+='<div class="opt" id="opt_'+i+'_'+j+'" onclick="pick('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+o+'</div>';});
+    html+='<div class="explanation" id="exp_'+i+'">💡 '+q.e+'</div>';
+    d.innerHTML=html;
+    area.appendChild(d);
+  });
+  updateQBar();
+}
+function pick(qi,sel){
+  if(answered[qi]!==null)return;
+  answered[qi]=sel;
+  const q=qs[qi];
+  q.o.forEach((_,j)=>{
+    const el=document.getElementById('opt_'+qi+'_'+j);
+    if(j===q.a)el.classList.add(sel===j?'correct':'reveal');
+    else if(j===sel)el.classList.add('wrong');
+  });
+  document.getElementById('exp_'+qi).classList.add('show');
+  updateQBar();
+  if(answered.every(a=>a!==null))setTimeout(showScore,600);
+}
+function updateQBar(){
+  const done=answered.filter(a=>a!==null).length;
+  document.getElementById('q-bar').style.width=(done/qs.length*100)+'%';
+}
+function showScore(){
+  const correct=answered.filter((a,i)=>a===qs[i].a).length;
+  const pct=Math.round(correct/qs.length*100);
+  document.getElementById('final-score').textContent=correct+' / '+qs.length;
+  document.getElementById('final-msg').textContent=pct+'% — '+(pct>=80?'Excellent ! Tu es prêt(e) !':(pct>=60?'Bien ! Encore quelques révisions.':'Continue à travailler, relis les fiches !'));
+  document.getElementById('score-area').style.display='block';
+  document.getElementById('score-area').scrollIntoView({behavior:'smooth'});
+}
+function resetQuiz(){
+  document.getElementById('score-area').style.display='none';
+  renderQuiz();
+  window.scrollTo(0,0);
+}
+renderQuiz();
+</script>
+</body>
+</html>
